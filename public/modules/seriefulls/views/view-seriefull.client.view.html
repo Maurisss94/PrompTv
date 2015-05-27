@@ -1,0 +1,48 @@
+<section data-ng-controller="SeriefullsController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="seriefull.nom"></h1>
+		<h3 data-ng-repeat="s in seriefull.temporades.num">
+			<p data-ng-bind="s.nom"></p>
+			<p data-ng-bind="'Temporada: '+s.temporada"></p>
+			<p data-ng-bind="'Capitol: '+s.num_Capitol"></p>
+
+
+
+		</h3>
+		<h3 data-ng-bind="'Descripció: '+seriefull.descripcio"></h3>
+
+		<h1>REPARTO:</h1>
+		<h3 data-ng-repeat="c in seriefull.casting">
+			<p data-ng-bind="c.nom"></p>
+			<p data-ng-bind="c.rol"></p>
+			<img data-ng-src="{{c.foto}}"/>
+
+		</h3>
+		<h1>Directors:</h1>
+		<p data-ng-bind="seriefull.durada"></p>
+		<h3 data-ng-repeat="d in seriefull.directors">
+			<p data-ng-bind="d.nom"></p>
+			<p data-ng-bind="d.rol"></p>
+
+		</h3>
+
+
+
+	</div>
+	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == seriefull.user._id))">
+		<a class="btn btn-primary" href="/#!/seriefulls/{{seriefull._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+	</div>
+	<small>
+		<em class="text-muted">
+			Posted on
+			<span data-ng-bind="seriefull.created | date:'mediumDate'"></span>
+			by
+			<span data-ng-bind="seriefull.user.displayName"></span>
+		</em>
+	</small>
+</section>

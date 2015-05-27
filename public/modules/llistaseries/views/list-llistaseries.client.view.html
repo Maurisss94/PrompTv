@@ -1,0 +1,17 @@
+<section data-ng-controller="LlistaseriesController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Llistat de Series</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="llistaserie in llistaseries" data-ng-href="#!/seriefulls/{{llistaserie.seriefull}}" class="list-group-item">
+			<small class="list-group-item-text">
+				<h3 data-ng-bind="llistaserie.nom"></h3>
+				<h4 data-ng-bind="llistaserie.any"></h4>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="llistaserie.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!llistaseries.$resolved || llistaseries.length">
+    	No Llistaseries yet, why don't you <a href="/#!/llistaseries/create">create one</a>?
+    </div>
+</section>

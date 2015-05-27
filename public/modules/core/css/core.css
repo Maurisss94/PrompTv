@@ -13,3 +13,4 @@
 .ng-valid.ng-dirty {
 	border-color: #78FA89;
 }
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

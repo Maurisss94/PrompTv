@@ -1,47 +1,63 @@
-<section data-ng-controller="HomeController">
-	<div class="jumbotron text-center">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12">
-				<img alt="MEAN.JS" class="img-responsive text-center" src="modules/core/img/brand/logo.png" />
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<p class="lead">
-				Open-Source Full-Stack Solution For MEAN Applications
-			</p>
-		</div>
-		<div class="row">
-			<p>
-				<a class="btn btn-primary btn-lg" href="http://meanjs.org" target="_blank">Learn more</a>
-			</p>
-		</div>
+<section style="margin-top: 40px;" data-ng-controller="HomeController">
+	<div class="col-md-8 text-center">
+		<div ng-controller="CarouselDemoCtrl">
+
+			<carousel interval="myInterval">
+				<slide ng-repeat="slide in slides" active="slide.active">
+					<img ng-src="{{slide.image}}" style="margin:auto;">
+					<div class="carousel-caption">
+						<h4>Slide {{$index}}</h4>
+						<p>{{slide.text}}</p>
+					</div>
+				</slide>
+			</carousel>
+
 	</div>
-	<div>
-		<h2>Congrats! You've configured and run the sample application.</h2>
-		<p>MEAN.JS is a web application boilerplate, which means you should start changing everything :-)</p>
-		<p>This sample application tracks users and articles.</p>
-		<ul>
-			<li>
-				Click
-				<em>Signup</em>
-				to get started.
-			</li>
-			<li>
-				Configure your app to work with your social accounts, by editing the
-				<em>/config/env/*.js</em>
-				files.
-			</li>
-			<li>
-				Edit your users module.
-			</li>
-			<li>
-				Add new CRUD modules.
-			</li>
-			<li>
-				Have fun...
-			</li>
-		</ul>
+	</div>
+	<div class="col-md-4" data-ng-controller="AuthenticationController">
+
+
+			<form data-ng-submit="signin()" class="col-md-offset-2 col-md-10 signin form-horizontal" autocomplete="off">
+				<fieldset>
+					<div class="form-group">
+						<input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Usuario">
+					</div>
+					<div class="form-group">
+						<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Contraseña">
+					</div>
+					<div class="text-center form-group">
+						<button style="width:100%"type="submit" class="btn btn-primary">ENTRAR</button>
+					</div>
+
+					<div data-ng-show="error" class="text-center text-danger">
+						<strong data-ng-bind="error"></strong>
+					</div>
+					<div class="col-md-12 text-center">
+						<a href="/auth/facebook" class="undecorated-link">
+							<img width=30 src="/modules/users/img/buttons/facebook.png">
+						</a>
+						<a href="/auth/twitter" class="undecorated-link">
+							<img width=30 src="/modules/users/img/buttons/twitter.png">
+						</a>
+						<a href="/auth/google" class="undecorated-link">
+							<img width=30 src="/modules/users/img/buttons/google.png">
+						</a>
+						<a href="/auth/linkedin" class="undecorated-link">
+							<img width=30 src="/modules/users/img/buttons/linkedin.png">
+						</a>
+						<a href="/auth/github" class="undecorated-link">
+							<img width=30 src="/modules/users/img/buttons/github.png">
+						</a>
+					</div>
+
+					<br>
+					<br>
+					<p class="text-center">PrompTV es una eina que et permet consultar tota la informació que vulguis de les teves series preferides</p>
+
+				</fieldset>
+			</form>
+		<a style="margin-bottom: 40px"class="col-md-10 col-md-offset-2 text-center  btn btn-primary" data-ng-if=!authentication.user href="/#!/signup">REGISTRATE</a>
+
 	</div>
 	<div class="row">
 		<div class="col-md-3">
