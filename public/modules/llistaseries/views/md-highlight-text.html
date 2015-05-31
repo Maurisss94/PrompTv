@@ -1,0 +1,6 @@
+<input placeholder="Enter a search term..." ng-model="searchTerm" type="text">
+<ul>
+    <li ng-repeat="result in results" md-highlight-text="searchTerm">
+        {{result.text}}
+    </li>
+</ul>

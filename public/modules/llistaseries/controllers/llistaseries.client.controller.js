@@ -1,9 +1,86 @@
 'use strict';
 
 // Llistaseries controller
-angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Llistaseries',
-	function($scope, $stateParams, $location, Authentication, Llistaseries) {
+var app = angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Llistaseries', '$log',
+	function($scope, $stateParams, $location, Authentication, Llistaseries,  $log) {
+
 		$scope.authentication = Authentication;
+
+		$scope.totalItems =120;
+		$scope.currentPage = 1;
+
+
+		var self = this;
+		self.simulateQuery = false;
+		self.isDisabled    = false;
+		// list of `state` value/display objects
+		self.states        = loadAll();
+		self.querySearch   = querySearch;
+		self.selectedItemChange = selectedItemChange;
+		self.searchTextChange   = searchTextChange;
+		// ******************************
+		// Internal methods
+		// ******************************
+		/**
+		 * Search for states... use $timeout to simulate
+		 * remote dataservice call.
+		 */
+		function querySearch (query) {
+			var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
+				deferred;
+			if (self.simulateQuery) {
+				deferred = $q.defer();
+				$timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+				return deferred.promise;
+			} else {
+				return results;
+			}
+		}
+		function searchTextChange(text) {
+			$log.info('Text changed to ' + text);
+		}
+		function selectedItemChange(item) {
+			$log.info('Item changed to ' + JSON.stringify(item));
+		}
+		/**
+		 * Build `states` list of key/value pairs
+		 */
+		function loadAll() {
+			$scope.definitiu= '';
+			var serie = Llistaseries.srv.query();
+			var text = "";
+			var aa = serie.$promise.then(function(data){
+				serie= data;
+				//console.log(serie);
+				for(var i=0;i<serie.length;i++){
+					text += serie[i].nom+ ', '
+
+				}
+				return text;
+			});
+			aa.then(function(data){
+				console.log(data);
+			});
+
+
+			return 'hola'.split(/, +/g).map( function (state) {
+				return {
+					value: state.toLowerCase(),
+					display: state
+				};
+			});
+		}
+		/**
+		 * Create filter function for a query string
+		 */
+		function createFilterFor(query) {
+			var lowercaseQuery = angular.lowercase(query);
+			return function filterFn(state) {
+				return (state.value.indexOf(lowercaseQuery) === 0);
+			};
+		}
+
+
 
 
 		// Create new Llistaserie
@@ -57,9 +134,14 @@ angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '
 			$location.path('/#!/');
 		} else {
 			$scope.find = function () {
-				$scope.llistaseries = Llistaseries.srv.query();
-				console.log($scope.llistaseries._id);
+				//$scope.llistaseries = Llistaseries.srv.query();
+				$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
+				$scope.pageChanged = function() {
+					$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
+
+				};
 			};
+
 
 		}
 	}
@@ -74,3 +156,7 @@ angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '
 	//	};
 	//}
 ]);
+app.run(function(paginationConfig){
+	paginationConfig.nextText='Siguiente';
+	paginationConfig.previousText='Anterior';
+})

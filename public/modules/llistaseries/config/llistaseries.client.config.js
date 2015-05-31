@@ -4,7 +4,6 @@
 angular.module('llistaseries').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Llistaseries', 'llistaseries');
-		Menus.addSubMenuItem('topbar', 'llistaseries', 'List Llistaseries', 'llistaseries');
+		Menus.addMenuItem('topbar', 'Llistat de series', 'llistaseries');
 	}
 ]);

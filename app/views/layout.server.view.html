@@ -36,11 +36,17 @@
 
 	<!--Application CSS Files-->
 	{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">{% endfor %}
+	<link rel="stylesheet" type="text/css" href="lib/slick/slick.css" />
+	<link rel="stylesheet" type="text/css" href="lib/slick/slick-theme.css" />
+	<link rel="stylesheet" type="text/css" href="lib/slick/slick-theme.css" />
+	<link rel="stylesheet" type="text/css" href="lib/animateCss/animate.css" />
+	<link rel="stylesheet" type="text/css" href="lib/animateCss/page-trans.css" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.0/angular-material.min.css">
 
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+	[endif]-->
 </head>
 
 <body class="ng-cloak">
@@ -57,7 +63,13 @@
 	</script>
 
 	<!--Application JavaScript Files-->
-	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %} 
+	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.0/angular-material.min.js"></script>
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/slick/slick.min.js"></script>
 
 	{% if process.env.NODE_ENV === 'development' %}
 	<!--Livereload script rendered -->

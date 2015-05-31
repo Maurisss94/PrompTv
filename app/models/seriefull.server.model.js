@@ -28,6 +28,9 @@ var SeriefullSchema = new Schema({
 	imatge: {
 		type: String
 	},
+	backdrop: {
+		type: String
+	},
 	any: {
 		type: Number
 	},
@@ -35,7 +38,7 @@ var SeriefullSchema = new Schema({
 		type: Number
 	},
 	temporades: {
-		num: [{
+		temp: [{
 			nom: {
 				type: String
 			},
@@ -86,7 +89,10 @@ var SeriefullSchema = new Schema({
 		nom: {
 			type: String
 		}
-	}]
+	}],
+	num_temporades: {
+		type:Number
+	}
 });
 
 mongoose.model('Seriefull', SeriefullSchema);

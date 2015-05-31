@@ -7,8 +7,15 @@ angular.module('llistaseries').factory('Llistaseries', ['$resource',
 			{
 				'update': { method:'PUT' }
 			}),
-			edit: null
+			edit: null,
+			prova: $resource('/llistaseries/paginate/:page/:total', {},
+{
+				})
+
 		}
+
+
 	}
+
 ]);
 

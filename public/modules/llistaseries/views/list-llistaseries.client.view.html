@@ -1,12 +1,50 @@
-<section data-ng-controller="LlistaseriesController" data-ng-init="find()">
+<section data-ng-controller="LlistaseriesController as ul" data-ng-init="find()">
     <div class="page-header">
         <h1>Llistat de Series</h1>
+
+                        md-selected-item="ul.selectedItem"
+                        md-search-text-change="ul.searchTextChange(ul.searchText)"
+                        md-search-text="ul.searchText"
+                        md-selected-item-change="ul.selectedItemChange(item)"
+                        md-items="item in ul.querySearch(ul.searchText)"
+                        md-item-text="item.display"
+                <md-content layout-padding layout="column">
+                    <form ng-submit="$event.preventDefault()">
+
+                        <md-autocomplete
+                                ng-disabled="ul.isDisabled"
+                                md-no-cache="ul.noCache"
+                        md-min-length="0"
+                        placeholder="What is your favorite US state?">
+                    <md-item-template>
+                        <span md-highlight-text="ul.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No matches found for "{{ul.searchText}}".
+                    </md-not-found>
+                </md-autocomplete>
+            </form>
+
+
+
+        </md-content>
     </div>
-    <div class="list-group">
-        <a data-ng-repeat="llistaserie in llistaseries" data-ng-href="#!/seriefulls/{{llistaserie.seriefull}}" class="list-group-item">
-			<small class="list-group-item-text">
-				<h3 data-ng-bind="llistaserie.nom"></h3>
-				<h4 data-ng-bind="llistaserie.any"></h4>
+    <div style="padding:0" class="list-group col-md-12 ">
+        <a style="padding:10px;" data-ng-repeat="llistaserie in llistaseries" data-ng-href="#!/seriefulls/{{llistaserie.seriefull}}" class="col-md-6 list-group-item">
+			<small class="text-center list-group-item-text">
+
+                <div align="center" ><img data-ng-src="{{llistaserie.imatge}}"/></div>
+                <h3 data-ng-bind="llistaserie.nom"></h3>
+                <h4 data-ng-bind="llistaserie.any"></h4>
+                <p data-ng-bind="llistaserie.descripcio"></p>
+
+                <div class="text-center">
+                    Canales:
+                    <span class="text-center" data-ng-repeat="prova in llistaserie.canals">
+                        <span class="text-center" data-ng-bind="prova.nom + ' '"></span>
+                    </span>
+                </div>
+
 			</small>
 			<h4 class="list-group-item-heading" data-ng-bind="llistaserie.name"></h4>
         </a>
@@ -14,4 +52,10 @@
     <div class="alert alert-warning text-center" data-ng-hide="!llistaseries.$resolved || llistaseries.length">
     	No Llistaseries yet, why don't you <a href="/#!/llistaseries/create">create one</a>?
     </div>
+
+    <div class="text-center col-md-12">
+    <pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+    <pre>Estás en la página: {{currentPage}}</pre>
+    </div>
+
 </section>

@@ -1,7 +1,28 @@
 <section data-ng-controller="SeriefullsController" data-ng-init="findOne()">
-	<div class="page-header">
+	<div class="col-md-12">
 		<h1 data-ng-bind="seriefull.nom"></h1>
-		<h3 data-ng-repeat="s in seriefull.temporades.num">
+	</div>
+	<div class="col-md-4">
+		<br>
+		<img style="margin-bottom:20px;"class="img-thumbnail img-responsive" data-ng-src="{{seriefull.imatge}}"/>
+		<br>
+		<accordion close-others="oneAtATime">
+			<accordion-group data-ng-repeat="n in numero" is-open="status.open">
+				<accordion-heading >
+					<span data-ng-bind="'Temporada '+n.num"></span><i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+				</accordion-heading><span data-ng-if="s.temporada == n.num" data-ng-repeat="s in seriefull.temporades.temp">
+				<span data-ng-bind="'Capítulo '+s.num_Capitol+': '"></span>
+				<span data-ng-bind="s.nom"></span><p></p>
+			</span>
+
+			</accordion-group>
+		</accordion>
+
+
+
+
+
+		<!--<h3 data-ng-repeat="s in seriefull.temporades.num">
 			<p data-ng-bind="s.nom"></p>
 			<p data-ng-bind="'Temporada: '+s.temporada"></p>
 			<p data-ng-bind="'Capitol: '+s.num_Capitol"></p>
@@ -24,23 +45,54 @@
 			<p data-ng-bind="d.nom"></p>
 			<p data-ng-bind="d.rol"></p>
 
-		</h3>
-
-
+		</h3>-->
 
 	</div>
-	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == seriefull.user._id))">
-		<a class="btn btn-primary" href="/#!/seriefulls/{{seriefull._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
+
+
+	<div align="center" class="col-md-8">
+		<h3>{{seriefull.episodis}}</h3>
+		<div>
+			<img style="width: 100%;opacity: 0.8" class="img-responsive" data-ng-src="{{seriefull.backdrop}}"/>
+			<tabset justified="true">
+				<tab heading="Información"><br>
+					<h4 style="text-align:left"><b>Año: </b><span data-ng-bind="seriefull.any"></span></h4>
+					<h4 style="text-align:left"><b>Durada: </b><span data-ng-bind="seriefull.durada+' min.'"></span></h4>
+					<h4 style="text-align:left"><b>Nota: </b><span data-ng-bind="seriefull.nota"></span></h4>
+					<h4 style="text-align:left"><b>Genero: </b><span data-ng-repeat="g in seriefull.genere">
+						<span data-ng-bind="g.nom + ', '"></span>
+					</span></h4>
+					<h4 style="text-align:left"><b>País: </b><span data-ng-repeat="p in seriefull.pais">
+						<span data-ng-bind="p.nom"></span>
+					</span></h4>
+
+
+					<br>
+					<h4 style="text-align:left"><b>Descripción:</b></h4><p style="text-align:left" data-ng-bind="seriefull.descripcio"></p></tab>
+				<tab heading="Reparto"><br>
+					<h4 style="margin:10px;" collapse="isCollapsed" data-ng-repeat="c in seriefull.casting">
+						<img style="float:left" width=30 height=40 data-ng-src="{{c.foto}}"/>
+						<span style=" color:#00BAE0" data-ng-bind="c.nom"></span>
+						<p data-ng-bind="c.rol"></p>
+
+					</h4></tab>
+
+				<tab heading="Directores"><br><p data-ng-repeat="d in seriefull.directors">
+
+					<span data-ng-bind="d.nom"></span>
+					<spanp data-ng-bind="d.rol"></spanp>
+				</p></tab>
+			</tabset>
+		</div>
+
 	</div>
-	<small>
+
+
+	<div class="page-header col-md-12"></div>
+	<small class="col-md-12">
 		<em class="text-muted">
 			Posted on
-			<span data-ng-bind="seriefull.created | date:'mediumDate'"></span>
+			<span data-ng-bind="authentication | date:'mediumDate'"></span>
 			by
 			<span data-ng-bind="seriefull.user.displayName"></span>
 		</em>

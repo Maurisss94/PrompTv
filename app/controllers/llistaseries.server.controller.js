@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 	Llistaserie = mongoose.model('Llistaserie'),
 	_ = require('lodash');
 
+
 var fullSerie = mongoose.model('Seriefull');
 
 var https = require('https');
@@ -36,6 +37,21 @@ exports.read = function(req, res) {
 	res.jsonp(req.llistaserie);
 };
 
+
+exports.paginate = function(req,res) {
+	console.log('++++++++++++++++++++++++++++++++++++++++');
+	console.log(req.params);
+	console.log('++++++++++++++++++++++++++++++++++++++++');
+	Llistaserie.paginate({},req.params.page,req.params.total,function(err, llistaseries, paginatedResults, itemCount) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(paginatedResults);
+		}
+	});
+}
 /**
  * Update a Llistaserie
  */
@@ -152,7 +168,7 @@ function fullInfo(idmF, token){
 
 	var info = {
 		'host': 'api.tviso.com',
-		'path': '/media/full_info?auth_token='+token+'&idm='+idmF+'&mediaType=1-Serie'
+		'path': '/media/full_info?auth_token='+token+'&idm='+idmF+'&mediaType=1-Serie&limit=48'
 	}
 	var txt ='';
 
@@ -182,6 +198,8 @@ function fullInfo(idmF, token){
 				};
 				var llargada = getLength(parser2.seasons);
 
+
+
 				if(parser2.seasons[llargada] != undefined) {
 
 					for(var i=0;i<=llargada;i++){
@@ -189,6 +207,7 @@ function fullInfo(idmF, token){
 						var llargada2 = getLength(parser2.seasons[i]);
 						for(var j=0;j<llargada2;j++){
 							aux2.push({
+
 								nom:parser2.seasons[i][j].name,
 								temporada:parser2.seasons[i][j].season,
 								num_Capitol:parser2.seasons[i][j].num
@@ -212,7 +231,8 @@ function fullInfo(idmF, token){
 					if(parser2.cast[i].images === undefined){
 						aux3.push({
 							nom: parser2.cast[i].name,
-							rol: parser2.cast[i].role
+							rol: parser2.cast[i].role,
+							foto: 'https://es.tviso.com/img/tviso-default-avatar.png'
 						});
 					}else {
 
@@ -262,10 +282,11 @@ function fullInfo(idmF, token){
 					idm: idmF,
 					imdb: parser2.imdb,
 					nom: parser2.name,
-					imatge: parser2.images.poster,
+					imatge: 'http://img.tviso.com/ES/poster/w200'+parser2.images.poster,
+					backdrop: 'https://img.tviso.com/ES/backdrop/w600'+parser2.images.backdrop,
 					any: parser2.year,
 					temporades: {
-						num: aux2
+						temp: aux2
 					},
 					descripcio: parser2.plot,
 					casting: aux3,
@@ -273,10 +294,11 @@ function fullInfo(idmF, token){
 					durada: parser2.runtime,
 					idioma: aux5,
 					pais: aux6,
-					genere: aux7
+					genere: aux7,
+					num_temporades: llargada
 
 				});
-				//console.log(serieCompleta.genere);
+				console.log(serieCompleta.imatge);
 
 
 				serieCompleta.save(function (err,sc) {
@@ -315,7 +337,7 @@ function getSerie(req, res, tok) {
 
 	var opt = {
 		'host': 'api.tviso.com',
-		'path': '/media/browse?auth_token=' + tok + '&mediaType=1-Serie'
+		'path': '/media/browse?auth_token=' + tok + '&mediaType=1-Serie&limit=48'
 	}
 
 
@@ -367,6 +389,8 @@ function getSerie(req, res, tok) {
 							imatge: 'http://img.tviso.com/ES/poster/w200' + parser.results.medias[i].images.poster,
 							seriefull: null
 						});
+
+						console.log(novaSerie.nom);
 
 
 						/**

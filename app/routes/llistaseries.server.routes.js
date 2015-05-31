@@ -5,6 +5,8 @@ module.exports = function(app) {
 	var llistaseries = require('../../app/controllers/llistaseries.server.controller');
 
 	// Llistaseries Routes
+	app.route('/llistaseries/paginate/:page/:total')
+		.get(llistaseries.paginate);
 	app.route('/llistaseries')
 		.get(llistaseries.list)
 		.post(users.requiresLogin, llistaseries.create);

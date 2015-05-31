@@ -5,6 +5,7 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 	function($scope, $stateParams, $location, Authentication, Seriefulls) {
 		$scope.authentication = Authentication;
 
+
 		// Create new Seriefull
 		//$scope.create = function() {
 		//	// Create new Seriefull object
@@ -58,11 +59,29 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 		}else{
 			$scope.find = function() {
 				$scope.seriefulls = Seriefulls.query();
+
 			};
 			$scope.findOne = function() {
 				$scope.seriefull = Seriefulls.get({
 					seriefullId: $stateParams.seriefullId
 				});
+				$scope.seriefull.$promise.then(function (data) {
+					console.log(data);
+
+					$scope.numero =[];
+
+					for(var i=1;i<=data.num_temporades;i++){
+
+							$scope.numero.push({
+								num: i
+							});
+
+					}
+					console.log($scope.numero);
+				})
+
+
+
 			};
 
 		}
@@ -72,3 +91,5 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 
 	}
 ]);
+
+
