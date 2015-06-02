@@ -14,7 +14,7 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 		self.simulateQuery = false;
 		self.isDisabled    = false;
 		// list of `state` value/display objects
-		self.states        = loadAll();
+		self.states        = null;
 		self.querySearch   = querySearch;
 		self.selectedItemChange = selectedItemChange;
 		self.searchTextChange   = searchTextChange;
@@ -25,6 +25,7 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 		 * Search for states... use $timeout to simulate
 		 * remote dataservice call.
 		 */
+		loadAll();
 		function querySearch (query) {
 			var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
 				deferred;
@@ -39,36 +40,36 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 		function searchTextChange(text) {
 			$log.info('Text changed to ' + text);
 		}
-		function selectedItemChange(item) {
+		function selectedItemChange(item,i) {
+
+			$location.path(item.link);
 			$log.info('Item changed to ' + JSON.stringify(item));
 		}
 		/**
 		 * Build `states` list of key/value pairs
 		 */
 		function loadAll() {
-			$scope.definitiu= '';
 			var serie = Llistaseries.srv.query();
 			var text = "";
-			var aa = serie.$promise.then(function(data){
+			var prova = [];
+			serie.$promise.then(function(data){
 				serie= data;
-				//console.log(serie);
+				console.log(serie);
 				for(var i=0;i<serie.length;i++){
-					text += serie[i].nom+ ', '
-
+					text += serie[i].nom+ '|' + data[i].seriefull+', '
 				}
-				return text;
-			});
-			aa.then(function(data){
-				console.log(data);
+
+				self.states = text.split(/, +/g).map(function (state,i) {
+					return {
+						value: state.split('|')[0].toLowerCase(),
+						display: state.split('|')[0],
+						link: '/seriefulls/'+ state.split('|')[1]
+					};
+
+					});
+
 			});
 
-
-			return 'hola'.split(/, +/g).map( function (state) {
-				return {
-					value: state.toLowerCase(),
-					display: state
-				};
-			});
 		}
 		/**
 		 * Create filter function for a query string
@@ -134,7 +135,6 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 			$location.path('/#!/');
 		} else {
 			$scope.find = function () {
-				//$scope.llistaseries = Llistaseries.srv.query();
 				$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
 				$scope.pageChanged = function() {
 					$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});

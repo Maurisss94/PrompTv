@@ -6,6 +6,7 @@
 		<br>
 		<img style="margin-bottom:20px;"class="img-thumbnail img-responsive" data-ng-src="{{seriefull.imatge}}"/>
 		<br>
+
 		<accordion close-others="oneAtATime">
 			<accordion-group data-ng-repeat="n in numero" is-open="status.open">
 				<accordion-heading >
@@ -19,34 +20,6 @@
 		</accordion>
 
 
-
-
-
-		<!--<h3 data-ng-repeat="s in seriefull.temporades.num">
-			<p data-ng-bind="s.nom"></p>
-			<p data-ng-bind="'Temporada: '+s.temporada"></p>
-			<p data-ng-bind="'Capitol: '+s.num_Capitol"></p>
-
-
-
-		</h3>
-		<h3 data-ng-bind="'Descripció: '+seriefull.descripcio"></h3>
-
-		<h1>REPARTO:</h1>
-		<h3 data-ng-repeat="c in seriefull.casting">
-			<p data-ng-bind="c.nom"></p>
-			<p data-ng-bind="c.rol"></p>
-			<img data-ng-src="{{c.foto}}"/>
-
-		</h3>
-		<h1>Directors:</h1>
-		<p data-ng-bind="seriefull.durada"></p>
-		<h3 data-ng-repeat="d in seriefull.directors">
-			<p data-ng-bind="d.nom"></p>
-			<p data-ng-bind="d.rol"></p>
-
-		</h3>-->
-
 	</div>
 
 
@@ -56,7 +29,11 @@
 			<img style="width: 100%;opacity: 0.8" class="img-responsive" data-ng-src="{{seriefull.backdrop}}"/>
 			<tabset justified="true">
 				<tab heading="Información"><br>
-					<h4 style="text-align:left"><b>Año: </b><span data-ng-bind="seriefull.any"></span></h4>
+					<div class="col-md-6" style="float:right">
+						<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+						<button style="float:right" class='btn btn-info' ng-click="create()">Añadir a favoritos <span class="glyphicon glyphicon-heart" aria-hidden="true"></span></button>
+					</div>
+						<h4 style="text-align:left"><b>Año: </b><span data-ng-bind="seriefull.any"></span></h4>
 					<h4 style="text-align:left"><b>Durada: </b><span data-ng-bind="seriefull.durada+' min.'"></span></h4>
 					<h4 style="text-align:left"><b>Nota: </b><span data-ng-bind="seriefull.nota"></span></h4>
 					<h4 style="text-align:left"><b>Genero: </b><span data-ng-repeat="g in seriefull.genere">

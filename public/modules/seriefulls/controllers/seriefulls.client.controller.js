@@ -1,10 +1,17 @@
 'use strict';
 
 // Seriefulls controller
-angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Seriefulls',
-	function($scope, $stateParams, $location, Authentication, Seriefulls) {
+angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Seriefulls', 'Preferits',
+	function($scope, $stateParams, $location, Authentication, Seriefulls, Preferits) {
 		$scope.authentication = Authentication;
 
+		$scope.alerts = [
+
+		];
+
+		$scope.closeAlert = function(index) {
+			$scope.alerts.splice(index, 1);
+		};
 
 		// Create new Seriefull
 		//$scope.create = function() {
@@ -66,7 +73,29 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 					seriefullId: $stateParams.seriefullId
 				});
 				$scope.seriefull.$promise.then(function (data) {
-					console.log(data);
+					$scope.create = function() {
+
+						console.log(data);
+
+						var preferit = new Preferits({
+							idm: data.idm,
+							nom: data.nom,
+							imatge: data.imatge,
+							temporades: data.num_temporades
+
+						});
+						preferit.$save(function(response) {
+
+
+						}, function(errorResponse) {
+							$scope.error = errorResponse.data.message;
+						});
+						console.log(preferit);
+
+
+
+
+					};
 
 					$scope.numero =[];
 
@@ -77,7 +106,7 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 							});
 
 					}
-					console.log($scope.numero);
+					//console.log($scope.numero);
 				})
 
 

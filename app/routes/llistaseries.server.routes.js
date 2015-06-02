@@ -23,6 +23,6 @@ module.exports = function(app) {
 	 * Carrega token, i info de la api de tviso.
 	 */
 	app.route('/carregar')
-		.get(llistaseries.recull);
+		.get(llistaseries.recull, llistaseries.hasAuthorization);
 
 };

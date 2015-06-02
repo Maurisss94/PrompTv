@@ -2,25 +2,27 @@
     <div class="page-header">
         <h1>Llistat de Series</h1>
 
-                        md-selected-item="ul.selectedItem"
-                        md-search-text-change="ul.searchTextChange(ul.searchText)"
-                        md-search-text="ul.searchText"
-                        md-selected-item-change="ul.selectedItemChange(item)"
-                        md-items="item in ul.querySearch(ul.searchText)"
-                        md-item-text="item.display"
+
                 <md-content layout-padding layout="column">
                     <form ng-submit="$event.preventDefault()">
 
                         <md-autocomplete
+                                md-selected-item="ul.selectedItem"
+                                md-search-text-change="ul.searchTextChange(ul.searchText)"
+                                md-search-text="ul.searchText"
+                                md-selected-item-change="ul.selectedItemChange(item)"
+                                md-items="item in ul.querySearch(ul.searchText)"
+                                md-item-text="item.display"
                                 ng-disabled="ul.isDisabled"
                                 md-no-cache="ul.noCache"
                         md-min-length="0"
-                        placeholder="What is your favorite US state?">
+                        placeholder="Busca tu serie favorita">
                     <md-item-template>
+
                         <span md-highlight-text="ul.searchText" md-highlight-flags="^i">{{item.display}}</span>
                     </md-item-template>
                     <md-not-found>
-                        No matches found for "{{ul.searchText}}".
+                        No hay resultados para "{{ul.searchText}}".
                     </md-not-found>
                 </md-autocomplete>
             </form>
@@ -50,7 +52,7 @@
         </a>
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!llistaseries.$resolved || llistaseries.length">
-    	No Llistaseries yet, why don't you <a href="/#!/llistaseries/create">create one</a>?
+    	No hay series disponibles
     </div>
 
     <div class="text-center col-md-12">

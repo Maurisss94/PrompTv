@@ -207,7 +207,6 @@ function fullInfo(idmF, token){
 						var llargada2 = getLength(parser2.seasons[i]);
 						for(var j=0;j<llargada2;j++){
 							aux2.push({
-
 								nom:parser2.seasons[i][j].name,
 								temporada:parser2.seasons[i][j].season,
 								num_Capitol:parser2.seasons[i][j].num
