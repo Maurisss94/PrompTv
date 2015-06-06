@@ -91,7 +91,9 @@ exports.delete = function(req, res) {
 /**
  * List of Llistaseries
  */
-exports.list = function(req, res) { 
+exports.list = function(req, res) {
+	var currentUser = req.session.passport.user;
+	console.log(currentUser);
 	Llistaserie.find().sort('-created').populate('user', 'displayName').exec(function(err, llistaseries) {
 		if (err) {
 			return res.status(400).send({
@@ -107,7 +109,7 @@ exports.list = function(req, res) {
  * Llistaserie middleware
  */
 exports.llistaserieByID = function(req, res, next, id) {
-	console.log('id'+ id);
+	//console.log('id'+ id);
 	Llistaserie.findById(id).populate('user', 'displayName').exec(function(err, llistaserie) {
 		if (err) return next(err);
 		if (! llistaserie) return next(new Error('Failed to load Llistaserie ' + id));

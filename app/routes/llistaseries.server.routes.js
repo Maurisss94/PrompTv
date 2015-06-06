@@ -7,8 +7,9 @@ module.exports = function(app) {
 	// Llistaseries Routes
 	app.route('/llistaseries/paginate/:page/:total')
 		.get(llistaseries.paginate);
+
 	app.route('/llistaseries')
-		.get(llistaseries.list)
+		.get(users.requiresLogin, llistaseries.list)
 		.post(users.requiresLogin, llistaseries.create);
 
 	app.route('/llistaseries/:llistaserieId')

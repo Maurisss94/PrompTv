@@ -8,10 +8,6 @@ angular.module('llistaseries').config(['$stateProvider',
 		state('listLlistaseries', {
 			url: '/llistaseries',
 			templateUrl: 'modules/llistaseries/views/list-llistaseries.client.view.html'
-		}).
-		state('viewLlistaserie', {
-			url: '/llistaseries/:llistaserieId',
-			templateUrl: 'modules/llistaseries/views/view-llistaserie.client.view.html'
 		});
 	}
 ]);

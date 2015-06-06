@@ -3,22 +3,22 @@
 module.exports = {
 	db: 'mongodb://localhost/promptv-dev',
 	app: {
-		title: 'PrompTv - Development Environment'
+		title: 'PrompTV - Tus series favoritas'
 	},
 	facebook: {
-		clientID: process.env.FACEBOOK_ID || 'APP_ID',
-		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
+		clientID: process.env.FACEBOOK_ID || '795280600579792',
+		clientSecret: process.env.FACEBOOK_SECRET || '5b005251ca228bdcffa585794344554d',
 		callbackURL: '/auth/facebook/callback'
 	},
 	twitter: {
-		clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',
-		clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
+		clientID: process.env.TWITTER_KEY || 'GR7YqO8MvwaAE7cFKulfoum4H',
+		clientSecret: process.env.TWITTER_SECRET || 'l6szDQaFaGjLGAACtnqPNZ9Hpp2bYguyKJKdOuDEvLAP1WICDs',
 		callbackURL: '/auth/twitter/callback'
 	},
 	google: {
-		clientID: process.env.GOOGLE_ID || 'APP_ID',
-		clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
-		callbackURL: '/auth/google/callback'
+		clientID: process.env.GOOGLE_ID || '272618762952-vrrjhsqih34kcp5aivk81s782rg5gugc.apps.googleusercontent.com',
+		clientSecret: process.env.GOOGLE_SECRET || '2_5v9HkNNpwQ3grHaE_MNfdI',
+		callbackURL: '/oauth2callback'
 	},
 	linkedin: {
 		clientID: process.env.LINKEDIN_ID || 'APP_ID',

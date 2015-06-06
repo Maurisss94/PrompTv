@@ -21,16 +21,19 @@ var fs = require('fs'),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
+	multer = require('multer'),
 	path = require('path');
 
 module.exports = function(db) {
 	// Initialize express app
 	var app = express();
 
+	app.use(multer( {dest : "./public/modules/users/css/imatges"}));
 	// Globbing model files
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
 		require(path.resolve(modelPath));
 	});
+
 
 	// Setting application local variables
 	app.locals.title = config.app.title;
@@ -96,6 +99,7 @@ module.exports = function(db) {
 		})
 	}));
 
+
 	// use passport session
 	app.use(passport.initialize());
 	app.use(passport.session());
@@ -157,6 +161,7 @@ module.exports = function(db) {
 		// Return HTTPS server instance
 		return httpsServer;
 	}
+
 
 	// Return Express server instance
 	return app;

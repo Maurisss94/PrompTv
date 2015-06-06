@@ -33,7 +33,7 @@ exports.forgot = function(req, res, next) {
 				}, '-salt -password', function(err, user) {
 					if (!user) {
 						return res.status(400).send({
-							message: 'No account with that username has been found'
+							message: 'No se ha encontrado una cuenta con ese nombre de usuario'
 						});
 					} else if (user.provider !== 'local') {
 						return res.status(400).send({
@@ -50,7 +50,7 @@ exports.forgot = function(req, res, next) {
 				});
 			} else {
 				return res.status(400).send({
-					message: 'Username field must not be blank'
+					message: 'El campo usuario no puede ser vacío'
 				});
 			}
 		},
@@ -69,7 +69,7 @@ exports.forgot = function(req, res, next) {
 			var mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
-				subject: 'Password Reset',
+				subject: 'Contraseña actualizada',
 				html: emailHTML
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
@@ -210,7 +210,7 @@ exports.changePassword = function(req, res) {
 											res.status(400).send(err);
 										} else {
 											res.send({
-												message: 'Password changed successfully'
+												message: 'Contraseña cambiada correctamente'
 											});
 										}
 									});
@@ -223,12 +223,12 @@ exports.changePassword = function(req, res) {
 						}
 					} else {
 						res.status(400).send({
-							message: 'Current password is incorrect'
+							message: 'Contraseña incorrecta'
 						});
 					}
 				} else {
 					res.status(400).send({
-						message: 'User is not found'
+						message: 'Usuario no encontrado'
 					});
 				}
 			});

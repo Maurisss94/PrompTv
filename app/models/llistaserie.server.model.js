@@ -45,6 +45,10 @@ var LlistaserieSchema = new Schema({
 	imatge:{
 		type: String
 	},
+	user: {
+		type: Schema.ObjectId,
+		ref: 'User'
+	},
 	seriefull: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'seriefull'

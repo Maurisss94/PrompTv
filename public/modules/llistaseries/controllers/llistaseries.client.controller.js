@@ -49,12 +49,14 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 		 * Build `states` list of key/value pairs
 		 */
 		function loadAll() {
+			console.log(Authentication.user);
 			var serie = Llistaseries.srv.query();
 			var text = "";
 			var prova = [];
+			console.log(serie);
 			serie.$promise.then(function(data){
 				serie= data;
-				console.log(serie);
+
 				for(var i=0;i<serie.length;i++){
 					text += serie[i].nom+ '|' + data[i].seriefull+', '
 				}

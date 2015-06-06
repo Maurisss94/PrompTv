@@ -1,7 +1,19 @@
 <section class="row" data-ng-controller="SettingsController">
 	<h3 class="col-md-12 text-center">Edit your profile</h3>
+
 	<div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
+
 		<form name="userForm" data-ng-submit="updateUserProfile(userForm.$valid)" class="signin form-horizontal" autocomplete="off">
+			<div class="input-control file">
+				<input type="file" nv-file-select uploader="uploader"/>
+			</div>
+			<ul>
+				<li ng-repeat="item in uploader.queue">
+					Name: <span ng-bind="item.file.name"></span><br/>
+					<button ng-click="item.upload()">upload</button>
+				</li>
+			</ul>
+			<img style="margin-bottom:20px;"class="img-thumbnail img-responsive" data-ng-src="{{'/imatge'}}"/>
 			<fieldset>
 				<div class="form-group">
 					<label for="firstName">First Name</label>

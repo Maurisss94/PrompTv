@@ -5,6 +5,7 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 	function($scope, $stateParams, $location, Authentication, Seriefulls, Preferits) {
 		$scope.authentication = Authentication;
 
+
 		$scope.alerts = [
 
 		];
@@ -75,23 +76,23 @@ angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$sta
 				$scope.seriefull.$promise.then(function (data) {
 					$scope.create = function() {
 
-						console.log(data);
-
 						var preferit = new Preferits({
 							idm: data.idm,
 							nom: data.nom,
 							imatge: data.imatge,
-							temporades: data.num_temporades
+							temporades: data.num_temporades,
+							seriefull: null
 
 						});
-						preferit.$save(function(response) {
 
+							preferit.$save(function(response) {
 
-						}, function(errorResponse) {
-							$scope.error = errorResponse.data.message;
-						});
-						console.log(preferit);
+								swal({   title: "Enhorabuena!",   text: "Añadida a favoritos",   type: "success",   confirmButtonText: "Aceptar" });
 
+							}, function(errorResponse) {
+
+								$scope.error = errorResponse.data.message;
+							});
 
 
 

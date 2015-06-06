@@ -8,6 +8,7 @@ var _ = require('lodash'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
 	User = mongoose.model('User');
+var path = require('path');
 
 /**
  * Signup
@@ -18,13 +19,15 @@ exports.signup = function(req, res) {
 
 	// Init Variables
 	var user = new User(req.body);
-	console.log(req.body);
+	//console.log(req.body);
 	var message = null;
 
 	// Add missing user fields
 	user.provider = 'local';
 	user.displayName = user.firstName + ' ' + user.lastName;
+	user.img =  'default.png';
 
+	console.log(user);
 	// Then save the user 
 	user.save(function(err) {
 		if (err) {
@@ -136,7 +139,8 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 							displayName: providerUserProfile.displayName,
 							email: providerUserProfile.email,
 							provider: providerUserProfile.provider,
-							providerData: providerUserProfile.providerData
+							providerData: providerUserProfile.providerData,
+							img:  'default.png'
 						});
 
 						// And save the user

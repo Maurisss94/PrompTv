@@ -13,4 +13,8 @@
 .ng-valid.ng-dirty {
 	border-color: #78FA89;
 }
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; margin-top:7px }
+.navbar-inverse{
+	background-color: white;
+	background-image: none;
+}

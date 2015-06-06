@@ -1,8 +1,14 @@
-'use strict';
+ 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $http, $location, Users, Authentication) {
+angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication', 'FileUploader',
+	function($scope, $http, $location, Users, Authentication, FileUploader) {
+
+
+		var uploader = $scope.uploader = new FileUploader({url:"/upload",alias:"image",removeAfterUpload: true});
+
+
 		$scope.user = Authentication.user;
+		console.log($scope.user);
 
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');
