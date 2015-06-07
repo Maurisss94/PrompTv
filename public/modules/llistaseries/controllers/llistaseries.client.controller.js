@@ -10,22 +10,25 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 		$scope.currentPage = 1;
 
 
+		/**
+		 * Objecte declarat per poder crear el buscador.
+		 */
 		var self = this;
 		self.simulateQuery = false;
 		self.isDisabled    = false;
-		// list of `state` value/display objects
 		self.states        = null;
 		self.querySearch   = querySearch;
 		self.selectedItemChange = selectedItemChange;
 		self.searchTextChange   = searchTextChange;
-		// ******************************
-		// Internal methods
-		// ******************************
-		/**
-		 * Search for states... use $timeout to simulate
-		 * remote dataservice call.
-		 */
 		loadAll();
+
+
+		/**
+		 * Funció que va buscant entre totes les series mentre
+		 * l'usuari escriu el nom de la serie.
+		 * @param query
+		 * @returns {*}
+		 */
 		function querySearch (query) {
 			var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
 				deferred;
@@ -46,14 +49,11 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 			$log.info('Item changed to ' + JSON.stringify(item));
 		}
 		/**
-		 * Build `states` list of key/value pairs
+		 * Funció que crea un objecte amb el nom de la serie i el link cap a ella.
 		 */
 		function loadAll() {
-			console.log(Authentication.user);
 			var serie = Llistaseries.srv.query();
 			var text = "";
-			var prova = [];
-			console.log(serie);
 			serie.$promise.then(function(data){
 				serie= data;
 
@@ -84,59 +84,13 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 		}
 
 
-
-
-		// Create new Llistaserie
-		//$scope.create = function() {
-		//	// Create new Llistaserie object
-		//	var llistaserie = new Llistaseries ({
-		//		name: this.name
-		//	});
-		//
-		//	// Redirect after save
-		//	llistaserie.$save(function(response) {
-		//		$location.path('llistaseries/' + response._id);
-		//
-		//		// Clear form fields
-		//		$scope.name = '';
-		//	}, function(errorResponse) {
-		//		$scope.error = errorResponse.data.message;
-		//	});
-		//};
-
-		// Remove existing Llistaserie
-		//$scope.remove = function(llistaserie) {
-		//	if ( llistaserie ) {
-		//		llistaserie.$remove();
-		//
-		//		for (var i in $scope.llistaseries) {
-		//			if ($scope.llistaseries [i] === llistaserie) {
-		//				$scope.llistaseries.splice(i, 1);
-		//			}
-		//		}
-		//	} else {
-		//		$scope.llistaserie.$remove(function() {
-		//			$location.path('llistaseries');
-		//		});
-		//	}
-		//};
-
-		// Update existing Llistaserie
-		//$scope.update = function() {
-		//	var llistaserie = $scope.llistaserie;
-		//
-		//	llistaserie.$update(function() {
-		//		$location.path('llistaseries/' + llistaserie._id);
-		//	}, function(errorResponse) {
-		//		$scope.error = errorResponse.data.message;
-		//	});
-		//};
-
-		// Find a list of Llistaseries
 		if ($scope.authentication.user === '') {
 			$location.path('/#!/');
 		} else {
 			$scope.find = function () {
+				/**
+				 * Es mostren 4 series per pagina.
+				 */
 				$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
 				$scope.pageChanged = function() {
 					$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
@@ -149,15 +103,10 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 	}
 
 
-		// Find existing Llistaserie
-	//	$scope.findOne = function() {
-	//		$scope.llistaseries = Llistaseries.srv.get({
-	//			llistaserieId: $stateParams.llistaserieId
-	//		});
-	//		console.log($stateParams.llistaserieId);
-	//	};
-	//}
 ]);
+/**
+ * Traducció de la paginació.
+ */
 app.run(function(paginationConfig){
 	paginationConfig.nextText='Siguiente';
 	paginationConfig.previousText='Anterior';

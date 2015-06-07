@@ -8,8 +8,11 @@ module.exports = function(app) {
 	app.route('/llistaseries/paginate/:page/:total')
 		.get(llistaseries.paginate);
 
+	/**
+	 * Ruta a la cual s'accedeix a la api per veure la llista de series.
+	 */
 	app.route('/llistaseries')
-		.get(users.requiresLogin, llistaseries.list)
+		.get( llistaseries.list)
 		.post(users.requiresLogin, llistaseries.create);
 
 	app.route('/llistaseries/:llistaserieId')

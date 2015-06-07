@@ -15,6 +15,13 @@ module.exports = {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+				"public/lib/slick/slick.css",
+				"public/lib/slick/slick-theme.css",
+				"public/lib/slick/slick-theme.css" ,
+				"public/lib/animateCss/animate.css" ,
+				"public/lib/animateCss/page-trans.css" ,
+				"public/lib/angular-material/angular-material.min.css",
+				"public/lib/sweetalert/dist/sweetalert.css"
 			],
 			js: [
 				'public/lib/angular/angular.js',
@@ -25,7 +32,13 @@ module.exports = {
 				'public/lib/angular-sanitize/angular-sanitize.js', 
 				'public/lib/angular-ui-router/release/angular-ui-router.js',
 				'public/lib/angular-ui-utils/ui-utils.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js'
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+				"public/lib/angular-aria/angular-aria.min.js",
+				"public/lib/angular-material/angular-material.min.js",
+				"public/lib/jquery/dist/jquery.min.js",
+				"public/lib/slick/slick.min.js",
+				"public/lib/angular-file-upload/angular-file-upload.min.js",
+				"public/lib/sweetalert/dist/sweetalert.min.js",
 			]
 		},
 		css: [

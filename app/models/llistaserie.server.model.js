@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 var mongoosePaginate = require('mongoose-paginate');
 
 /**
- * Llistaserie Schema
+ * Model LlistaSerie amb les seves propietats.
  */
 var LlistaserieSchema = new Schema({
 	idm:{

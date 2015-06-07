@@ -7,11 +7,10 @@ var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Llistaserie = mongoose.model('Llistaserie'),
 	_ = require('lodash');
-
-
 var fullSerie = mongoose.model('Seriefull');
 
 var https = require('https');
+
 /**
  * Create a Llistaserie
  */
@@ -37,11 +36,12 @@ exports.read = function(req, res) {
 	res.jsonp(req.llistaserie);
 };
 
-
+/**
+ * Metode que permet paginar la llista de series
+ * @param req peticio de l'usuari.
+ * @param res resposta.
+ */
 exports.paginate = function(req,res) {
-	console.log('++++++++++++++++++++++++++++++++++++++++');
-	console.log(req.params);
-	console.log('++++++++++++++++++++++++++++++++++++++++');
 	Llistaserie.paginate({},req.params.page,req.params.total,function(err, llistaseries, paginatedResults, itemCount) {
 		if (err) {
 			return res.status(400).send({
@@ -92,8 +92,7 @@ exports.delete = function(req, res) {
  * List of Llistaseries
  */
 exports.list = function(req, res) {
-	var currentUser = req.session.passport.user;
-	console.log(currentUser);
+
 	Llistaserie.find().sort('-created').populate('user', 'displayName').exec(function(err, llistaseries) {
 		if (err) {
 			return res.status(400).send({
@@ -109,7 +108,6 @@ exports.list = function(req, res) {
  * Llistaserie middleware
  */
 exports.llistaserieByID = function(req, res, next, id) {
-	//console.log('id'+ id);
 	Llistaserie.findById(id).populate('user', 'displayName').exec(function(err, llistaserie) {
 		if (err) return next(err);
 		if (! llistaserie) return next(new Error('Failed to load Llistaserie ' + id));
@@ -165,8 +163,12 @@ function obtenirToken(req, res, callback) {
 
 }
 
+/**
+ * Funció que obté la informació completa de la serie
+ * @param idmF id de la serie.
+ * @param token d'autorització.
+ */
 function fullInfo(idmF, token){
-
 
 	var info = {
 		'host': 'api.tviso.com',
@@ -184,10 +186,7 @@ function fullInfo(idmF, token){
 
 			var aux2 = [];
 
-
 			function carregarFull() {
-
-
 
 				var getLength = function(obj) {
 					var i = 0, key;
@@ -213,22 +212,16 @@ function fullInfo(idmF, token){
 								temporada:parser2.seasons[i][j].season,
 								num_Capitol:parser2.seasons[i][j].num
 							});
-							//console.log("Nom: "+parser2.seasons[i][j].name);
-							//console.log("Temporada: "+parser2.seasons[i][j].season);
-							//console.log("Capitol: "+parser2.seasons[i][j].num);
+
 						}
 					}
 
 
 				}
 				var castingLlargada = getLength(parser2.cast);
-				//console.log(castingLlargada);
 
 				var aux3=[];
 				for(var i= 0;i<castingLlargada;i++){
-					//console.log(parser2.cast[i]);
-
-					//console.log(parser2.cast[i].images.face);
 					if(parser2.cast[i].images === undefined){
 						aux3.push({
 							nom: parser2.cast[i].name,
@@ -278,7 +271,10 @@ function fullInfo(idmF, token){
 				}
 
 
-
+				/**
+				 * Es crea l'objecte fullSerie amb les seves propietats.
+				 * @type {*|Model}
+				 */
 				var serieCompleta = new fullSerie({
 					idm: idmF,
 					imdb: parser2.imdb,
@@ -299,13 +295,18 @@ function fullInfo(idmF, token){
 					num_temporades: llargada
 
 				});
-				console.log(serieCompleta.imatge);
 
-
+				/**
+				 * Es guarden les series a mongo.
+				 */
 				serieCompleta.save(function (err,sc) {
 					if (err) {
 						console.log(errorHandler.getErrorMessage(err));
 					}else{
+						/**
+						 * Indiquem que la llista de series te un camp mes amb una redireccio
+						 * cap a la serie completa.
+						 */
 						Llistaserie.findOneAndUpdate({'idm': idmF}, {'seriefull': sc._id},function(err) {
 							if (err) {
 								console.log(err);
@@ -361,10 +362,9 @@ function getSerie(req, res, tok) {
 				parser = JSON.parse(str);
 				var aux = [];
 
-				//console.log(parser.results);
 				function carregar() {
 					for (var i = 0; i < parser.results.medias.length; i++) {
-						//console.log(parser.results.medias[i]);
+
 						if (parser.results.medias[i].schedule_summary != undefined) {
 							aux = [];
 							for (var j = 0; j < parser.results.medias[i].schedule_summary.length; j++) {
@@ -391,7 +391,6 @@ function getSerie(req, res, tok) {
 							seriefull: null
 						});
 
-						console.log(novaSerie.nom);
 
 
 						/**
@@ -414,8 +413,6 @@ function getSerie(req, res, tok) {
 
 				Llistaserie.remove({}, carregar);
 				console.log("taula llistaSerie borrada");
-				//fullSerie.remove({}, carregar);
-
 				res.status(200).send();
 			}
 		);
@@ -425,6 +422,11 @@ function getSerie(req, res, tok) {
 	var req2 = https.request(opt, callback).end();
 }
 
+/**
+ * Metode que obte el token, la serie i la seva informacio completa.
+ * @param req
+ * @param res
+ */
 exports.recull = function(req, res) {
 	fullSerie.remove({}, function(err) {
 		if(err){
@@ -436,7 +438,6 @@ exports.recull = function(req, res) {
 	});
 	obtenirToken(req, res, getSerie);
 
-	//return res.redirect('/#!/settings/profile');
 }
 
 

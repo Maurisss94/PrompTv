@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 /**
- * Seriefull Schema
+ * Model SerieFull amb les seves propietats.
  */
 var SeriefullSchema = new Schema({
 
