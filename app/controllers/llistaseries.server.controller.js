@@ -132,22 +132,17 @@ exports.hasAuthorization = function(req, res, next) {
  * Funcio que obte el token de la api.
  */
 function obtenirToken(req, res, callback) {
-
 	var url = {
 		'host': 'api.tviso.com',
 		'path': '/auth_token?id_api=3344&secret=5rwAZHZHRWevqyqtreUR'
 	}
-
 	var text= '';
 	var tokenParse = '';
 	var token = '';
-
 	var callback2 = function(response) {
-
 		response.on('data', function(chunk) {
 			text += chunk;
 		});
-
 		response.on('end', function() {
 			tokenParse = JSON.parse(text);
 			token = tokenParse.auth_token;
@@ -155,12 +150,8 @@ function obtenirToken(req, res, callback) {
 			callback(req, res, token);
 			return token;
 		});
-
-
 	}
-
 	var req3 = https.request(url, callback2).end();
-
 }
 
 /**
@@ -341,8 +332,6 @@ function getSerie(req, res, tok) {
 		'host': 'api.tviso.com',
 		'path': '/media/browse?auth_token=' + tok + '&mediaType=1-Serie&limit=48'
 	}
-
-
 	var str = '';
 
 	var callback = function (response) {
@@ -400,7 +389,6 @@ function getSerie(req, res, tok) {
 							if (err) {
 								console.log(errorHandler.getErrorMessage(err));
 							}
-
 						});
 
 						fullInfo(novaSerie.idm, tok);

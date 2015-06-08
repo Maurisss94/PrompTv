@@ -56,22 +56,17 @@ var app = angular.module('llistaseries').controller('LlistaseriesController', ['
 			var text = "";
 			serie.$promise.then(function(data){
 				serie= data;
-
 				for(var i=0;i<serie.length;i++){
 					text += serie[i].nom+ '|' + data[i].seriefull+', '
 				}
-
 				self.states = text.split(/, +/g).map(function (state,i) {
 					return {
 						value: state.split('|')[0].toLowerCase(),
 						display: state.split('|')[0],
 						link: '/seriefulls/'+ state.split('|')[1]
 					};
-
 					});
-
 			});
-
 		}
 		/**
 		 * Create filter function for a query string
