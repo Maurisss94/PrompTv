@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'promptv';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'ngAria', 'ngMaterial', 'angularFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -51,6 +51,14 @@ ApplicationConfiguration.registerModule('core');
 ApplicationConfiguration.registerModule('llistaseries');
 'use strict';
 
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('preferits');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('seriefulls');
+'use strict';
+
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');
 'use strict';
@@ -76,6 +84,7 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 		$scope.authentication = Authentication;
 		$scope.isCollapsed = false;
 		$scope.menu = Menus.getMenu('topbar');
+		console.log($scope.menu);
 
 		$scope.toggleCollapsibleMenu = function() {
 			$scope.isCollapsed = !$scope.isCollapsed;
@@ -94,6 +103,41 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 	function($scope, Authentication) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
+
+		$scope.myInterval = 5000;
+
+	}
+
+
+
+]);
+
+'use strict';
+
+angular.module('core').directive('slider', [
+	function() {
+		return {
+			templateUrl: 'modules/core/views/slider.html',
+			restrict: 'E',
+			link: function postLink(scope, element, attrs) {
+				// Slider directive logic
+				// ...
+				console.log(element[0]);
+				$('.autoplay').slick({
+					slidesToShow: 1,
+					slidesToScroll: 1,
+					autoplay: true,
+					autoplaySpeed: 4000,
+
+						dots: true,
+						infinite: true,
+						speed: 500,
+						fade: true,
+						cssEase: 'linear'
+
+				});
+			}
+		};
 	}
 ]);
 'use strict';
@@ -268,9 +312,7 @@ angular.module('core').service('Menus', [
 angular.module('llistaseries').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Llistaseries', 'llistaseries', 'dropdown', '/llistaseries(/create)?');
-		Menus.addSubMenuItem('topbar', 'llistaseries', 'List Llistaseries', 'llistaseries');
-		Menus.addSubMenuItem('topbar', 'llistaseries', 'New Llistaserie', 'llistaseries/create');
+		Menus.addMenuItem('topbar', 'Lista de series', 'llistaseries');
 	}
 ]);
 'use strict';
@@ -283,88 +325,147 @@ angular.module('llistaseries').config(['$stateProvider',
 		state('listLlistaseries', {
 			url: '/llistaseries',
 			templateUrl: 'modules/llistaseries/views/list-llistaseries.client.view.html'
-		}).
-		state('createLlistaserie', {
-			url: '/llistaseries/create',
-			templateUrl: 'modules/llistaseries/views/create-llistaserie.client.view.html'
-		}).
-		state('viewLlistaserie', {
-			url: '/llistaseries/:llistaserieId',
-			templateUrl: 'modules/llistaseries/views/view-llistaserie.client.view.html'
-		}).
-		state('editLlistaserie', {
-			url: '/llistaseries/:llistaserieId/edit',
-			templateUrl: 'modules/llistaseries/views/edit-llistaserie.client.view.html'
 		});
+	}
+]);
+
+'use strict';
+
+// Llistaseries controller
+var app = angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Llistaseries', '$log',
+	function($scope, $stateParams, $location, Authentication, Llistaseries,  $log) {
+
+		$scope.authentication = Authentication;
+
+		$scope.totalItems =120;
+		$scope.currentPage = 1;
+
+
+		/**
+		 * Objecte declarat per poder crear el buscador.
+		 */
+		var self = this;
+		self.simulateQuery = false;
+		self.isDisabled    = false;
+		self.states        = null;
+		self.querySearch   = querySearch;
+		self.selectedItemChange = selectedItemChange;
+		self.searchTextChange   = searchTextChange;
+		loadAll();
+
+
+		/**
+		 * Funció que va buscant entre totes les series mentre
+		 * l'usuari escriu el nom de la serie.
+		 * @param query
+		 * @returns {*}
+		 */
+		function querySearch (query) {
+			var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
+				deferred;
+			if (self.simulateQuery) {
+				deferred = $q.defer();
+				$timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+				return deferred.promise;
+			} else {
+				return results;
+			}
+		}
+		function searchTextChange(text) {
+			$log.info('Text changed to ' + text);
+		}
+		function selectedItemChange(item,i) {
+
+			$location.path(item.link);
+			$log.info('Item changed to ' + JSON.stringify(item));
+		}
+		/**
+		 * Funció que crea un objecte amb el nom de la serie i el link cap a ella.
+		 */
+		function loadAll() {
+			var serie = Llistaseries.srv.query();
+			var text = "";
+			serie.$promise.then(function(data){
+				serie= data;
+
+				for(var i=0;i<serie.length;i++){
+					text += serie[i].nom+ '|' + data[i].seriefull+', '
+				}
+
+				self.states = text.split(/, +/g).map(function (state,i) {
+					return {
+						value: state.split('|')[0].toLowerCase(),
+						display: state.split('|')[0],
+						link: '/seriefulls/'+ state.split('|')[1]
+					};
+
+					});
+
+			});
+
+		}
+		/**
+		 * Create filter function for a query string
+		 */
+		function createFilterFor(query) {
+			var lowercaseQuery = angular.lowercase(query);
+			return function filterFn(state) {
+				return (state.value.indexOf(lowercaseQuery) === 0);
+			};
+		}
+
+
+		if ($scope.authentication.user === '') {
+			$location.path('/#!/');
+		} else {
+			$scope.find = function () {
+				/**
+				 * Es mostren 4 series per pagina.
+				 */
+				$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
+				$scope.pageChanged = function() {
+					$scope.llistaseries = Llistaseries.prova.query({'total':4,'page': $scope.currentPage});
+
+				};
+			};
+
+
+		}
+	}
+
+
+]);
+/**
+ * Traducció de la paginació.
+ */
+app.run(["paginationConfig", function(paginationConfig){
+	paginationConfig.nextText='Siguiente';
+	paginationConfig.previousText='Anterior';
+}])
+
+'use strict';
+
+angular.module('llistaseries').directive('autocomplete', [
+	function() {
+		return {
+			template: 'modules/llistaseries/views/md-highlight-text.html',
+			restrict: 'E',
+			link: function postLink(scope, element, attrs) {
+
+			}
+		};
 	}
 ]);
 'use strict';
 
-// Llistaseries controller
-angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Llistaseries',
-	function($scope, $stateParams, $location, Authentication, Llistaseries) {
-		$scope.authentication = Authentication;
+angular.module('llistaseries').directive('autocomplete', [
+	function() {
+		return {
+			template: 'modules/llistaseries/views/md-autocomplete-text.html',
+			restrict: 'E',
+			link: function postLink(scope, element, attrs) {
 
-
-		// Create new Llistaserie
-		$scope.create = function() {
-			// Create new Llistaserie object
-			var llistaserie = new Llistaseries ({
-				name: this.name
-			});
-
-			// Redirect after save
-			llistaserie.$save(function(response) {
-				$location.path('llistaseries/' + response._id);
-
-				// Clear form fields
-				$scope.name = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
-
-		// Remove existing Llistaserie
-		$scope.remove = function(llistaserie) {
-			if ( llistaserie ) { 
-				llistaserie.$remove();
-
-				for (var i in $scope.llistaseries) {
-					if ($scope.llistaseries [i] === llistaserie) {
-						$scope.llistaseries.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.llistaserie.$remove(function() {
-					$location.path('llistaseries');
-				});
 			}
-		};
-
-		// Update existing Llistaserie
-		$scope.update = function() {
-			var llistaserie = $scope.llistaserie;
-
-			llistaserie.$update(function() {
-				$location.path('llistaseries/' + llistaserie._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
-
-		// Find a list of Llistaseries
-		$scope.find = function() {
-			$scope.llistaseries = Llistaseries.srv.query();
-			console.log($scope.llistaseries._id);
-		};
-
-
-		// Find existing Llistaserie
-		$scope.findOne = function() {
-			$scope.llistaseries = Llistaseries.srv.get({
-				llistaserieId: $stateParams.llistaserieId
-			});
-			console.log($stateParams.llistaserieId);
 		};
 	}
 ]);
@@ -373,16 +474,240 @@ angular.module('llistaseries').controller('LlistaseriesController', ['$scope', '
 //Llistaseries service used to communicate Llistaseries REST endpoints
 angular.module('llistaseries').factory('Llistaseries', ['$resource',
 	function($resource) {
-		return {srv: $resource("/llistaseries/:llistaserieId'", null,
+		return {srv: $resource("/llistaseries/:llistaserieId", null,
 			{
 				'update': { method:'PUT' }
 			}),
-			edit: null
+			edit: null,
+			prova: $resource('/llistaseries/paginate/:page/:total', {},
+{
+				})
+
 		}
+
+
 	}
+
 ]);
 
 
+'use strict';
+
+// Configuring the Articles module
+angular.module('preferits').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Tus Favoritos', 'preferits');
+
+	}
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('preferits').config(['$stateProvider',
+	function($stateProvider) {
+		// Preferits state routing
+		$stateProvider.
+		state('listPreferits', {
+			url: '/preferits',
+			templateUrl: 'modules/preferits/views/list-preferits.client.view.html'
+		});
+	}
+]);
+
+'use strict';
+
+// Preferits controller
+angular.module('preferits').controller('PreferitsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Preferits',
+	function($scope, $stateParams, $location, Authentication, Preferits) {
+		$scope.authentication = Authentication;
+
+		// Create new Preferit
+		$scope.create = function() {
+			// Create new Preferit object
+			var preferit = new Preferits ({
+				name: this.name
+			});
+
+			// Redirect after save
+			preferit.$save(function(response) {
+				$location.path('preferits/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Preferit
+		$scope.remove = function(preferit) {
+			if ( preferit ) { 
+				preferit.$remove();
+
+				for (var i in $scope.preferits) {
+					if ($scope.preferits [i] === preferit) {
+						$scope.preferits.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.preferit.$remove(function() {
+					$location.path('preferits');
+				});
+			}
+		};
+
+		// Update existing Preferit
+		$scope.update = function() {
+			var preferit = $scope.preferit;
+
+			preferit.$update(function() {
+				$location.path('preferits/' + preferit._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Preferits
+		$scope.find = function() {
+			$scope.preferits = Preferits.query();
+		};
+
+		// Find existing Preferit
+		$scope.findOne = function() {
+			$scope.preferit = Preferits.get({ 
+				preferitId: $stateParams.preferitId
+			});
+		};
+	}
+]);
+
+'use strict';
+
+//Preferits service used to communicate Preferits REST endpoints
+angular.module('preferits').factory('Preferits', ['$resource',
+	function($resource) {
+		return $resource('preferits/:preferitId', { preferitId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('seriefulls').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		//Menus.addMenuItem('topbar', 'Seriefulls', 'seriefulls', 'dropdown', '/seriefulls(/create)?');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('seriefulls').config(['$stateProvider',
+	function($stateProvider) {
+		// Seriefulls state routing
+		$stateProvider.
+		state('listSeriefulls', {
+			url: '/seriefulls',
+			templateUrl: 'modules/seriefulls/views/list-seriefulls.client.view.html'
+		}).
+		state('viewSeriefull', {
+			url: '/seriefulls/:seriefullId',
+			templateUrl: 'modules/seriefulls/views/view-seriefull.client.view.html'
+		});
+	}
+]);
+
+'use strict';
+
+// Seriefulls controller
+angular.module('seriefulls').controller('SeriefullsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Seriefulls', 'Preferits',
+    function ($scope, $stateParams, $location, Authentication, Seriefulls, Preferits) {
+        $scope.authentication = Authentication;
+
+
+        // Find a list of Seriefulls
+        if ($scope.authentication.user === '') {
+            $location.path('/#!/');
+
+        } else {
+            $scope.find = function () {
+                $scope.seriefulls = Seriefulls.query();
+
+            };
+            $scope.findOne = function () {
+                $scope.seriefull = Seriefulls.get({
+                    seriefullId: $stateParams.seriefullId
+                });
+                $scope.seriefull.$promise.then(function (data) {
+                    $scope.create = function () {
+
+                        var preferit = new Preferits({
+                            idm: data.idm,
+                            nom: data.nom,
+                            imatge: data.imatge,
+                            temporades: data.num_temporades,
+                            seriefull: null
+
+                        });
+
+                        preferit.$save(function (response) {
+
+                            swal({
+                                title: "Enhorabuena!",
+                                text: "Añadida a favoritos",
+                                type: "success",
+                                confirmButtonText: "Aceptar"
+                            });
+
+                        }, function (errorResponse) {
+
+                            $scope.error = errorResponse.data.message;
+                        });
+
+
+                    };
+
+                    $scope.numero = [];
+
+                    for (var i = 1; i <= data.num_temporades; i++) {
+
+                        $scope.numero.push({
+                            num: i
+                        });
+
+                    }
+
+                })
+
+
+            };
+
+        }
+
+    }
+]);
+
+
+
+'use strict';
+
+//Seriefulls service used to communicate Seriefulls REST endpoints
+angular.module('seriefulls').factory('Seriefulls', ['$resource',
+	function($resource) {
+		return $resource('seriefulls/:seriefullId', { seriefullId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
 'use strict';
 
 // Config HTTP Error Handling
@@ -485,7 +810,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 				$scope.authentication.user = response;
 
 				// And redirect to the index page
-				$location.path('/');
+				$location.path('/llistaseries');
 			}).error(function(response) {
 				$scope.error = response.message;
 			});
@@ -536,11 +861,17 @@ angular.module('users').controller('PasswordController', ['$scope', '$stateParam
 		};
 	}
 ]);
-'use strict';
+ 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $http, $location, Users, Authentication) {
+angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication', 'FileUploader',
+	function($scope, $http, $location, Users, Authentication, FileUploader) {
+
+
+		var uploader = $scope.uploader = new FileUploader({url:"/upload",alias:"image",removeAfterUpload: true});
+
+
 		$scope.user = Authentication.user;
+		console.log($scope.user);
 
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');

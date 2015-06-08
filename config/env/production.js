@@ -1,23 +1,36 @@
 'use strict';
 
 module.exports = {
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/promptv',
+	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://mauro:maurobale94@ds043942.mongolab.com:43942/promptv',
 	assets: {
 		lib: {
 			css: [
-				'public/lib/bootstrap/dist/css/bootstrap.min.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
+				'public/lib/bootstrap/dist/css/bootstrap.css',
+				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+				"public/lib/slick/slick.css",
+				"public/lib/slick/slick-theme.css",
+				"public/lib/slick/slick-theme.css" ,
+				"public/lib/animateCss/animate.css" ,
+				"public/lib/animateCss/page-trans.css" ,
+				"public/lib/angular-material/angular-material.min.css",
+				"public/lib/sweetalert/dist/sweetalert.css"
 			],
 			js: [
-				'public/lib/angular/angular.min.js',
-				'public/lib/angular-resource/angular-resource.js', 
-				'public/lib/angular-cookies/angular-cookies.js', 
-				'public/lib/angular-animate/angular-animate.js', 
-				'public/lib/angular-touch/angular-touch.js', 
-				'public/lib/angular-sanitize/angular-sanitize.js', 
-				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
-				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
+				'public/lib/angular/angular.js',
+				'public/lib/angular-resource/angular-resource.js',
+				'public/lib/angular-cookies/angular-cookies.js',
+				'public/lib/angular-animate/angular-animate.js',
+				'public/lib/angular-touch/angular-touch.js',
+				'public/lib/angular-sanitize/angular-sanitize.js',
+				'public/lib/angular-ui-router/release/angular-ui-router.js',
+				'public/lib/angular-ui-utils/ui-utils.js',
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+				"public/lib/angular-aria/angular-aria.min.js",
+				"public/lib/angular-material/angular-material.min.js",
+				"public/lib/jquery/dist/jquery.min.js",
+				"public/lib/slick/slick.min.js",
+				"public/lib/angular-file-upload/angular-file-upload.min.js",
+				"public/lib/sweetalert/dist/sweetalert.min.js"
 			]
 		},
 		css: 'public/dist/application.min.css',
@@ -36,7 +49,7 @@ module.exports = {
 	google: {
 		clientID: process.env.GOOGLE_ID || '272618762952-vrrjhsqih34kcp5aivk81s782rg5gugc.apps.googleusercontent.com',
 		clientSecret: process.env.GOOGLE_SECRET || '2_5v9HkNNpwQ3grHaE_MNfdI',
-		callbackURL: '/auth/google/callback'
+		callbackURL: '/oauth2callback'
 	},
 	linkedin: {
 		clientID: process.env.LINKEDIN_ID || 'APP_ID',

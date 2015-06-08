@@ -1,0 +1,35 @@
+<section data-ng-controller="PreferitsController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Favoritos</h1>
+    </div>
+    <div class="list-group">
+        <div data-ng-repeat="preferit in preferits" data-ng-href="#!/seriefulls/{{preferit.seriefull}}" class="list-group-item">
+
+            <div class="row">
+                <div class="col-md-1">
+            <a data-ng-href="#!/seriefulls/{{preferit.seriefull}}"><img class="img-responsive" width=100 data-ng-src="{{preferit.imatge}}"/></a>
+                </div>
+                <div class="col-md-11">
+                    <h2 data-ng-bind="' '+preferit.nom"></h2>
+                <span data-ng-bind="'Temporadas: '+preferit.temporades"></span>
+                <button class="col-md-offset-10 btn btn-primary" data-ng-click="remove(preferit);">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
+                </div>
+            </div>
+
+			<small class="list-group-item-text">
+				Añadida el
+				<span data-ng-bind="preferit.created | date:'medium'"></span>
+				por
+				<span data-ng-bind="preferit.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="preferit.name"></h4>
+
+        </div>
+
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!preferits.$resolved || preferits.length">
+    	No tienes favoritos consulta la lista de  <a href="/#!/llistaseries">series</a>
+    </div>
+</section>
